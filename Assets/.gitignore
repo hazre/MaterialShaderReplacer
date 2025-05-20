@@ -1,0 +1,4 @@
+# Ignore everything in this directory because unity hub is stupid and requires Assets folder to exist
+*
+# Except this file
+!.gitignore

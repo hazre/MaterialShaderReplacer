@@ -1,0 +1,17 @@
+{
+  "name": "dev.hazre.materialshaderreplacer",
+  "version": "1.0.0",
+  "displayName": "Material Shader Replacer",
+  "description": "A Unity Editor tool to mass replace material shaders.",
+  "unity": "2022.3",
+  "keywords": [
+    "unity",
+    "editor",
+    "shaders",
+    "materials"
+  ],
+  "dependencies": {},
+  "author": {
+    "name": "hazre"
+  }
+}

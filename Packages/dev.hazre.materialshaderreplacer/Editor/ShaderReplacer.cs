@@ -16,7 +16,7 @@ public class ShaderReplacerTool : EditorWindow
     [MenuItem("Tools/Material Shader Replacer")]
     public static void ShowWindow()
     {
-        GetWindow<ShaderReplacerTool>("Shader Replacer").minSize = new Vector2(350, 300);
+        GetWindow<ShaderReplacerTool>("Material Shader Replacer").minSize = new Vector2(350, 300);
     }
 
     void OnEnable()
@@ -91,7 +91,6 @@ public class ShaderReplacerTool : EditorWindow
 
     void OnGUI()
     {
-        GUILayout.Label("Mass Shader Replacer", EditorStyles.boldLabel);
         EditorGUILayout.HelpBox("This tool finds all materials in the project using the 'Source Shader' and changes them to the 'Target Shader'. Make sure to back up your project before running!", MessageType.Info);
 
         sourceShader = ShaderSelectorGUI("Source Shader", sourceShader);

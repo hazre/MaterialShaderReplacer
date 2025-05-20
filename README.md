@@ -2,7 +2,7 @@
 
 Batch replace shaders on materials in your Unity project.
 
-<a href="vcc://vpm/addRepo?url=https://hazre.github.io/vpm-listing/index.json"><img alt="Add to VCC / ALCOM" src="https://img.shields.io/badge/-Add%20to%20VCC%20\%20ALCOM-%232baac1?style=for-the-badge"></a>
+<a href="https://hazre.github.io/vpm-listing"><img alt="Add to VCC / ALCOM" src="https://img.shields.io/badge/-Add%20to%20VCC%20\%20ALCOM-%232baac1?style=for-the-badge"></a>
 
 Quickly swap one shader for another across many materials. Useful for upgrades or bulk changes.
 

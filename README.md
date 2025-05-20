@@ -6,6 +6,8 @@ Batch replace shaders on materials in your Unity project.
 
 Quickly swap one shader for another across many materials. Useful for upgrades or bulk changes.
 
+https://github.com/user-attachments/assets/15591d4d-7ca2-4acb-bcc2-fa85d1c278d3
+
 ## Installation
 
 Use [this link](https://hazre.github.io/vpm-listing) to add the repository to VCC.

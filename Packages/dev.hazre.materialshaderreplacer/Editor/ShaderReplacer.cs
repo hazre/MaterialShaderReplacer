@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Reflection;
 
 public class ShaderReplacerTool : EditorWindow
 {
@@ -9,9 +11,15 @@ public class ShaderReplacerTool : EditorWindow
     private Shader targetShader;
     private Vector2 scrollPosition;
     private List<string> changedMaterialsLog = new List<string>();
-    private static List<Shader> allShadersCache;
-    private static string[] allShaderDisplayNamesCache;
-    private const string NONE_SHADER_DISPLAY_NAME = " (None)";
+
+    private static Type shaderSelectionDropdownType;
+    private static ConstructorInfo shaderSelectionDropdownConstructor;
+    private static MethodInfo shaderSelectionDropdownShowMethod;
+    private static Type advancedDropdownStateType;
+    private static bool reflectionInitialized = false;
+    private static bool reflectionFailed = false;
+
+    private bool isSelectingSourceShader;
 
     [MenuItem("Tools/Material Shader Replacer")]
     public static void ShowWindow()
@@ -21,80 +29,153 @@ public class ShaderReplacerTool : EditorWindow
 
     void OnEnable()
     {
-        PopulateShaderListIfNeeded();
+        InitializeReflection();
     }
 
-    private static void PopulateShaderListIfNeeded()
+    private static void InitializeReflection()
     {
-        if (allShadersCache == null || allShadersCache.Count == 0 || allShaderDisplayNamesCache == null || allShaderDisplayNamesCache.Length == 0)
+        if (reflectionInitialized && !reflectionFailed) return;
+        if (reflectionFailed) return;
+
+        try
         {
-            allShadersCache = new List<Shader>();
-            List<string> displayNames = new List<string>();
+            Assembly editorAssembly = typeof(Editor).Assembly;
 
-            allShadersCache.Add(null);
-            displayNames.Add(NONE_SHADER_DISPLAY_NAME);
+            shaderSelectionDropdownType = editorAssembly.GetType("UnityEditor.MaterialEditor+ShaderSelectionDropdown");
+            if (shaderSelectionDropdownType == null) throw new Exception("MaterialEditor.ShaderSelectionDropdown type not found.");
 
-            ShaderInfo[] shaderInfos = ShaderUtil.GetAllShaderInfo();
-            var sortedShaderInfos = shaderInfos.OrderBy(s => s.name).ToArray();
+            advancedDropdownStateType = editorAssembly.GetType("UnityEditor.IMGUI.Controls.AdvancedDropdownState");
+            if (advancedDropdownStateType == null) throw new Exception("AdvancedDropdownState type not found.");
 
-            foreach (ShaderInfo info in sortedShaderInfos)
-            {
-                // if (info.name.StartsWith("Hidden/") || info.name.StartsWith("Internal") || !info.hasSupportedSubshaders) continue;
+            shaderSelectionDropdownConstructor = shaderSelectionDropdownType.GetConstructor(
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new Type[] { typeof(Shader), typeof(Action<object>) },
+                null
+            );
+            if (shaderSelectionDropdownConstructor == null) throw new Exception("ShaderSelectionDropdown constructor(Shader, Action<object>) not found.");
 
-                Shader shader = Shader.Find(info.name);
-                if (shader != null)
-                {
-                    allShadersCache.Add(shader);
-                    displayNames.Add(info.name);
-                }
-            }
-            allShaderDisplayNamesCache = displayNames.ToArray();
+            Type advancedDropdownType = editorAssembly.GetType("UnityEditor.IMGUI.Controls.AdvancedDropdown");
+            if (advancedDropdownType == null) throw new Exception("AdvancedDropdown type not found.");
+            shaderSelectionDropdownShowMethod = advancedDropdownType.GetMethod(
+                "Show",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                null,
+                new Type[] { typeof(Rect) },
+                null
+            );
+            if (shaderSelectionDropdownShowMethod == null) throw new Exception("AdvancedDropdown.Show(Rect) method not found.");
+
+            reflectionInitialized = true;
+            reflectionFailed = false;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"ShaderReplacerTool: Reflection initialization failed. Falling back to basic shader fields. Error: {e.Message}\n{e.StackTrace}");
+            reflectionFailed = true;
+            reflectionInitialized = true;
         }
     }
 
-    private Shader ShaderSelectorGUI(string label, Shader currentShader)
+    private void ShowReflectedShaderDropdown(Rect buttonRect, Shader currentShader)
     {
-        PopulateShaderListIfNeeded();
-
-        int currentIndex = 0;
-        if (currentShader != null)
+        if (reflectionFailed || !reflectionInitialized)
         {
-            for (int i = 1; i < allShadersCache.Count; i++)
-            {
-                if (allShadersCache[i] == currentShader)
-                {
-                    currentIndex = i;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            if (allShadersCache.Count > 0 && allShadersCache[0] == null)
-            {
-                currentIndex = 0;
-            }
+            Debug.LogError("Cannot show reflected shader dropdown due to reflection initialization failure.");
+            return;
         }
 
-
-        int newIndex = EditorGUILayout.Popup(label, currentIndex, allShaderDisplayNamesCache);
-
-        if (newIndex >= 0 && newIndex < allShadersCache.Count)
+        try
         {
-            if (newIndex != currentIndex)
-            {
-                return allShadersCache[newIndex];
-            }
+            Action<object> onSelectedCallback = OnShaderSelectedFromDropdown;
+            object[] constructorArgs = new object[] { currentShader, onSelectedCallback };
+            object dropdownInstance = shaderSelectionDropdownConstructor.Invoke(constructorArgs);
+
+            shaderSelectionDropdownShowMethod.Invoke(dropdownInstance, new object[] { buttonRect });
         }
-        return currentShader;
+        catch (Exception e)
+        {
+            bool isExitGUI = false;
+            Exception originalException = e;
+
+            if (e is TargetInvocationException && e.InnerException != null)
+            {
+                originalException = e.InnerException;
+            }
+
+            if (originalException is ExitGUIException)
+            {
+                isExitGUI = true;
+            }
+
+            if (isExitGUI)
+            {
+                throw originalException;
+            }
+
+            Debug.LogError($"Error showing reflected shader dropdown: {originalException.GetType().Name}: {originalException.Message}\n{originalException.StackTrace}");
+            reflectionFailed = true;
+            Repaint();
+        }
+    }
+
+    private void OnShaderSelectedFromDropdown(object shaderNameObj)
+    {
+        if (shaderNameObj is string shaderName && !string.IsNullOrEmpty(shaderName))
+        {
+            Shader selectedShader = Shader.Find(shaderName);
+            if (isSelectingSourceShader)
+            {
+                sourceShader = selectedShader;
+            }
+            else
+            {
+                targetShader = selectedShader;
+            }
+            Repaint();
+        }
+    }
+
+    private Shader FallbackShaderField(string label, Shader currentShader)
+    {
+        return EditorGUILayout.ObjectField(label, currentShader, typeof(Shader), false) as Shader;
     }
 
     void OnGUI()
     {
         EditorGUILayout.HelpBox("This tool finds all materials in the project using the 'Source Shader' and changes them to the 'Target Shader'. Make sure to back up your project before running!", MessageType.Info);
 
-        sourceShader = ShaderSelectorGUI("Source Shader", sourceShader);
-        targetShader = ShaderSelectorGUI("Target Shader", targetShader);
+        if (!reflectionInitialized)
+        {
+            InitializeReflection();
+        }
+
+        if (reflectionFailed)
+        {
+            EditorGUILayout.HelpBox("Failed to load advanced shader dropdown. Using basic ObjectFields.", MessageType.Warning);
+            sourceShader = FallbackShaderField("Source Shader", sourceShader);
+            targetShader = FallbackShaderField("Target Shader", targetShader);
+        }
+        else
+        {
+            GUIContent sourceButtonContent = new GUIContent(sourceShader != null ? sourceShader.name : "(None)");
+            Rect sourceRect = EditorGUILayout.GetControlRect();
+            sourceRect = EditorGUI.PrefixLabel(sourceRect, EditorGUIUtility.TrTempContent("Source Shader"));
+            if (EditorGUI.DropdownButton(sourceRect, sourceButtonContent, FocusType.Keyboard))
+            {
+                isSelectingSourceShader = true;
+                ShowReflectedShaderDropdown(sourceRect, sourceShader);
+            }
+
+            GUIContent targetButtonContent = new GUIContent(targetShader != null ? targetShader.name : "(None)");
+            Rect targetRect = EditorGUILayout.GetControlRect();
+            targetRect = EditorGUI.PrefixLabel(targetRect, EditorGUIUtility.TrTempContent("Target Shader"));
+            if (EditorGUI.DropdownButton(targetRect, targetButtonContent, FocusType.Keyboard))
+            {
+                isSelectingSourceShader = false;
+                ShowReflectedShaderDropdown(targetRect, targetShader);
+            }
+        }
 
         EditorGUILayout.Space();
 

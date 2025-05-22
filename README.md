@@ -21,6 +21,7 @@ https://github.com/user-attachments/assets/deb91184-b3dd-4b61-9956-053af6664c37
     *   Or, limit changes to a **specific GameObject and all objects nested under it**.
 *   **Skip Specific GameObjects:** Exclude certain GameObjects (and their children) from shader changes when working within a hierarchy.
 *   Supports Unity's **Undo** functionality for most changes.
+*   **Localization Support:** The tool supports multiple languages (English, Japanese, German).
 
 ## Installation
 
@@ -55,3 +56,8 @@ Then add `Material Shader Replacer` package to your projects.
 
 *   **⚠️ ALWAYS BACKUP YOUR PROJECT FIRST!** This tool modifies assets. (Or better yet, version control your project, so you can always rollback)
 *   It only changes the shader reference, **not** its properties (textures, colors, etc.). You'll need to adjust those manually if the new shader has different property names or types.
+
+## Credits
+
+* Localization system is based on code from [anatawa12's AvatarOptimizer](https://github.com/anatawa12/AvatarOptimizer).
+* Uses [Non-Destructive Modular Framework (NDMF)](https://github.com/bdunderscore/ndmf) as a dependency for localization.

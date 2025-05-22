@@ -1,0 +1,16 @@
+{
+  "name": "dev.hazre.materialshaderreplacer.localization",
+  "rootNamespace": "dev.hazre.materialshaderreplacer",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

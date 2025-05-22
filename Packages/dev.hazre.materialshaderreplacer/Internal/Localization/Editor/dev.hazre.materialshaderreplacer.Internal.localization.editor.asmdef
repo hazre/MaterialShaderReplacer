@@ -1,0 +1,19 @@
+{
+  "name": "dev.hazre.materialshaderreplacer.Internal.localization.editor",
+  "rootNamespace": "dev.hazre.materialshaderreplacer",
+  "references": [
+    "nadena.dev.ndmf",
+    "dev.hazre.materialshaderreplacer.Internal.localization.runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

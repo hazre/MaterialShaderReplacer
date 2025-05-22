@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Language: en-us\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "MaterialShaderReplacer:Window:Title"
+msgstr "Material Shader Replacer"
+
+msgid "MaterialShaderReplacer:Error:ReflectionInitFailed"
+msgstr "ShaderReplacerTool: Reflection initialization failed. Using basic fields. Error: "
+
+msgid "MaterialShaderReplacer:Error:ReflectionNotReady"
+msgstr "Reflection not ready for shader dropdown."
+
+msgid "MaterialShaderReplacer:Error:ShowShaderDropdownFailed"
+msgstr "Error showing reflected shader dropdown: "
+
+msgid "MaterialShaderReplacer:Label:SourceShader"
+msgstr "Source Shader"
+
+msgid "MaterialShaderReplacer:Label:TargetShader"
+msgstr "Target Shader"
+
+msgid "MaterialShaderReplacer:HelpBox:BackupProject"
+msgstr "Replaces shaders on materials. Always back up your project first!"
+
+msgid "MaterialShaderReplacer:Label:ProcessingScope"
+msgstr "Processing Scope"
+
+msgid "MaterialShaderReplacer:Label:Scope"
+msgstr "Scope"
+
+msgid "MaterialShaderReplacer:Label:RootGameObject"
+msgstr "Root GameObject"
+
+msgid "MaterialShaderReplacer:Label:ShaderSelection"
+msgstr "Shader Selection"
+
+msgid "MaterialShaderReplacer:HelpBox:AdvancedDropdownFailed"
+msgstr "Advanced shader dropdown failed. Using basic ObjectFields."
+
+msgid "MaterialShaderReplacer:Label:GameObjectExclusionFilter"
+msgstr "GameObject Exclusion Filter"
+
+msgid "MaterialShaderReplacer:Label:ExcludedGameObjects"
+msgstr "Excluded GameObjects"
+
+msgid "MaterialShaderReplacer:HelpBox:ExclusionFilterDisabled"
+msgstr "Exclusion filter is disabled for 'Entire Project' scope. It primarily affects 'GameObject And Children' scope."
+
+msgid "MaterialShaderReplacer:Button:ReplaceShaders"
+msgstr "Replace Shaders"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:Title"
+msgstr "Confirm Shader Replacement"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryFormat"
+msgstr "Are you sure you want to replace all materials using '{0}' with '{1}' {2}?"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:ScopeProject"
+msgstr "in the entire project"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:ScopeGameObjectFormat"
+msgstr "under '{0}'"
+
+msgid "MaterialShaderReplacer:Text:UnassignedRoot"
+msgstr "Unassigned Root"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:Warning"
+msgstr "This action can be undone for assets, but scene changes need scene undo/revert. BACKUP YOUR PROJECT."
+
+msgid "MaterialShaderReplacer:Button:YesReplace"
+msgstr "Yes, Replace"
+
+msgid "MaterialShaderReplacer:Button:Cancel"
+msgstr "Cancel"
+
+msgid "MaterialShaderReplacer:Label:LogChangedMaterials"
+msgstr "Log of Changed Materials:"
+
+msgid "MaterialShaderReplacer:Label:NoMaterialsChanged"
+msgstr "No materials changed yet."
+
+msgid "MaterialShaderReplacer:Text:None"
+msgstr "(None)"
+
+msgid "MaterialShaderReplacer:Dialog:Error:Title"
+msgstr "Error"
+
+msgid "MaterialShaderReplacer:Dialog:Error:SourceShaderMissing"
+msgstr "Source Shader not selected!"
+
+msgid "MaterialShaderReplacer:Button:OK"
+msgstr "OK"
+
+msgid "MaterialShaderReplacer:Dialog:Error:TargetShaderMissing"
+msgstr "Target Shader not selected!"
+
+msgid "MaterialShaderReplacer:Dialog:Error:ShadersSame"
+msgstr "Source and Target shaders are the same!"
+
+msgid "MaterialShaderReplacer:Dialog:Error:RootGameObjectMissing"
+msgstr "Root GameObject not selected for the current scope!"
+
+msgid "MaterialShaderReplacer:Message:ScenesModifiedFormat"
+msgstr "\n{0} scene(s) were modified. Remember to save them."
+
+msgid "MaterialShaderReplacer:Dialog:Success:Title"
+msgstr "Success"
+
+msgid "MaterialShaderReplacer:Dialog:Success:MessageFormat"
+msgstr "Successfully changed shader on {0} material instance(s).{1}\nCheck the log in the tool window."
+
+msgid "MaterialShaderReplacer:Dialog:NoChanges:Title"
+msgstr "No Changes"
+
+msgid "MaterialShaderReplacer:Dialog:NoChanges:Message"
+msgstr "No materials found matching the criteria, or operation was cancelled."
+
+msgid "MaterialShaderReplacer:ProgressBar:ReplacingProject:Title"
+msgstr "Replacing Shaders (Project)"
+
+msgid "MaterialShaderReplacer:ProgressBar:ProcessingAsset:Format"
+msgstr "Processing Asset: {0}"
+
+msgid "MaterialShaderReplacer:Text:Unknown"
+msgstr "Unknown"
+
+msgid "MaterialShaderReplacer:Log:OperationCancelledByUser"
+msgstr "Operation cancelled by user."
+
+msgid "MaterialShaderReplacer:Undo:ChangeShaderAsset"
+msgstr "Change Shader on Asset"
+
+msgid "MaterialShaderReplacer:Log:ChangedAsset:Format"
+msgstr "Changed ASSET: {0} (Shader: {1} -> {2})"
+
+msgid "MaterialShaderReplacer:ProgressBar:ReplacingGameObject:Title"
+msgstr "Replacing Shaders (GameObject Scope)"
+
+msgid "MaterialShaderReplacer:ProgressBar:ProcessingRenderer:Format"
+msgstr "Processing Renderer: {0}"
+
+msgid "MaterialShaderReplacer:Log:SkippedExcluded:Format"
+msgstr "SKIPPED (Excluded): {0}"
+
+msgid "MaterialShaderReplacer:Undo:ChangeShaderInstanceOrAsset"
+msgstr "Change Shader on Material Instance/Asset"
+
+msgid "MaterialShaderReplacer:Log:ChangedOnGameObject:Format"
+msgstr "Changed on '{0}' (Material: {1}, Index: {2}): {3} -> {4}"
+
+msgid "MaterialShaderReplacer:Enum:ProcessingScope:EntireProject"
+msgstr "Entire Project"
+
+msgid "MaterialShaderReplacer:Enum:ProcessingScope:GameObjectAndChildren"
+msgstr "GameObject And Children"

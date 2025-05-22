@@ -11,6 +11,9 @@
     "materials"
   ],
   "dependencies": {},
+  "vpmDependencies": {
+    "nadena.dev.ndmf": "^1.7.0"
+  },
   "author": {
     "name": "hazre"
   }

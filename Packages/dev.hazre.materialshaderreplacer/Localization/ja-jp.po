@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Language: ja-jp\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "MaterialShaderReplacer:Window:Title"
+msgstr "マテリアルシェーダーリプレーサー"
+
+msgid "MaterialShaderReplacer:Error:ReflectionInitFailed"
+msgstr "シェーダーリプレーサーツール: リフレクションの初期化に失敗しました。基本フィールドを使用します。エラー: "
+
+msgid "MaterialShaderReplacer:Error:ReflectionNotReady"
+msgstr "シェーダーのドロップダウンに対してリフレクションの準備ができていません。"
+
+msgid "MaterialShaderReplacer:Error:ShowShaderDropdownFailed"
+msgstr "リフレクションされたシェーダーのドロップダウン表示エラー: "
+
+msgid "MaterialShaderReplacer:Label:SourceShader"
+msgstr "変換元シェーダー"
+
+msgid "MaterialShaderReplacer:Label:TargetShader"
+msgstr "変換先シェーダー"
+
+msgid "MaterialShaderReplacer:HelpBox:BackupProject"
+msgstr "マテリアルのシェーダーを置換します。最初に必ずプロジェクトをバックアップしてください！"
+
+msgid "MaterialShaderReplacer:Label:ProcessingScope"
+msgstr "処理範囲"
+
+msgid "MaterialShaderReplacer:Label:Scope"
+msgstr "範囲"
+
+msgid "MaterialShaderReplacer:Label:RootGameObject"
+msgstr "ルートゲームオブジェクト"
+
+msgid "MaterialShaderReplacer:Label:ShaderSelection"
+msgstr "シェーダー選択"
+
+msgid "MaterialShaderReplacer:HelpBox:AdvancedDropdownFailed"
+msgstr "高度なシェーダーのドロップダウンに失敗しました。基本的なオブジェクトフィールドを使用します。"
+
+msgid "MaterialShaderReplacer:Label:GameObjectExclusionFilter"
+msgstr "ゲームオブジェクト除外フィルター"
+
+msgid "MaterialShaderReplacer:Label:ExcludedGameObjects"
+msgstr "除外されたゲームオブジェクト"
+
+msgid "MaterialShaderReplacer:HelpBox:ExclusionFilterDisabled"
+msgstr "除外フィルターは「プロジェクト全体」の範囲では無効です。主に「ゲームオブジェクトとその子」の範囲に影響します。"
+
+msgid "MaterialShaderReplacer:Button:ReplaceShaders"
+msgstr "シェーダーを置換"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:Title"
+msgstr "シェーダー置換の確認"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryFormat"
+msgstr "{2}、'{0}' を使用している全てのマテリアルを '{1}' に置換してもよろしいですか？"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:ScopeProject"
+msgstr "プロジェクト全体で"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:ScopeGameObjectFormat"
+msgstr "'{0}' (およびその子) の範囲で"
+
+msgid "MaterialShaderReplacer:Text:UnassignedRoot"
+msgstr "未割り当てのルート"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:Warning"
+msgstr "この操作はアセットに対して元に戻すことができますが、シーンの変更はシーンのアンドゥ/リバートが必要です。プロジェクトをバックアップしてください。"
+
+msgid "MaterialShaderReplacer:Button:YesReplace"
+msgstr "はい、置換します"
+
+msgid "MaterialShaderReplacer:Button:Cancel"
+msgstr "キャンセル"
+
+msgid "MaterialShaderReplacer:Label:LogChangedMaterials"
+msgstr "変更されたマテリアルのログ:"
+
+msgid "MaterialShaderReplacer:Label:NoMaterialsChanged"
+msgstr "まだ変更されたマテリアルはありません。"
+
+msgid "MaterialShaderReplacer:Text:None"
+msgstr "(なし)"
+
+msgid "MaterialShaderReplacer:Dialog:Error:Title"
+msgstr "エラー"
+
+msgid "MaterialShaderReplacer:Dialog:Error:SourceShaderMissing"
+msgstr "変換元シェーダーが選択されていません！"
+
+msgid "MaterialShaderReplacer:Button:OK"
+msgstr "OK"
+
+msgid "MaterialShaderReplacer:Dialog:Error:TargetShaderMissing"
+msgstr "変換先シェーダーが選択されていません！"
+
+msgid "MaterialShaderReplacer:Dialog:Error:ShadersSame"
+msgstr "変換元シェーダーと変換先シェーダーが同じです！"
+
+msgid "MaterialShaderReplacer:Dialog:Error:RootGameObjectMissing"
+msgstr "現在の範囲に対してルートゲームオブジェクトが選択されていません！"
+
+msgid "MaterialShaderReplacer:Message:ScenesModifiedFormat"
+msgstr "\n{0} 個のシーンが変更されました。忘れずに保存してください。"
+
+msgid "MaterialShaderReplacer:Dialog:Success:Title"
+msgstr "成功"
+
+msgid "MaterialShaderReplacer:Dialog:Success:MessageFormat"
+msgstr "{0} 個のマテリアルインスタンスのシェーダーを正常に変更しました。{1}\nツールウィンドウのログを確認してください。"
+
+msgid "MaterialShaderReplacer:Dialog:NoChanges:Title"
+msgstr "変更なし"
+
+msgid "MaterialShaderReplacer:Dialog:NoChanges:Message"
+msgstr "条件に一致するマテリアルが見つからないか、操作がキャンセルされました。"
+
+msgid "MaterialShaderReplacer:ProgressBar:ReplacingProject:Title"
+msgstr "シェーダーを置換中 (プロジェクト)"
+
+msgid "MaterialShaderReplacer:ProgressBar:ProcessingAsset:Format"
+msgstr "アセットを処理中: {0}"
+
+msgid "MaterialShaderReplacer:Text:Unknown"
+msgstr "不明"
+
+msgid "MaterialShaderReplacer:Log:OperationCancelledByUser"
+msgstr "ユーザーによって操作がキャンセルされました。"
+
+msgid "MaterialShaderReplacer:Undo:ChangeShaderAsset"
+msgstr "アセットのシェーダーを変更"
+
+msgid "MaterialShaderReplacer:Log:ChangedAsset:Format"
+msgstr "アセット変更: {0} (シェーダー: {1} -> {2})"
+
+msgid "MaterialShaderReplacer:ProgressBar:ReplacingGameObject:Title"
+msgstr "シェーダーを置換中 (ゲームオブジェクト範囲)"
+
+msgid "MaterialShaderReplacer:ProgressBar:ProcessingRenderer:Format"
+msgstr "レンダラーを処理中: {0}"
+
+msgid "MaterialShaderReplacer:Log:SkippedExcluded:Format"
+msgstr "スキップ (除外): {0}"
+
+msgid "MaterialShaderReplacer:Undo:ChangeShaderInstanceOrAsset"
+msgstr "マテリアルインスタンス/アセットのシェーダーを変更"
+
+msgid "MaterialShaderReplacer:Log:ChangedOnGameObject:Format"
+msgstr "'{0}' 上で変更 (マテリアル: {1}, インデックス: {2}): {3} -> {4}"
+
+msgid "MaterialShaderReplacer:Enum:ProcessingScope:EntireProject"
+msgstr "プロジェクト全体"
+
+msgid "MaterialShaderReplacer:Enum:ProcessingScope:GameObjectAndChildren"
+msgstr "ゲームオブジェクトとその子"

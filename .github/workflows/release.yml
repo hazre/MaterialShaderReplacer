@@ -16,18 +16,76 @@ jobs:
     
       - name: Checkout
         uses: actions/checkout@v4
-    
-      - name: get version
-        id: version
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create Release PR or Version Files
+        id: changesets
+        run: pnpm changeset version
+
+      - name: Commit Changeset Files
+        run: |
+          git add .changeset/ package.json pnpm-lock.yaml CHANGELOG.md
+          # Check if there are changes to commit to avoid error
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: version packages"
+            git push
+          else
+            echo "No version changes to commit."
+          fi
+
+      - name: Get New Version from Root package.json
+        id: root_version
         uses: notiz-dev/github-action-json-property@v0.2.0
-        with: 
-            path: "Packages/${{env.packageName}}/package.json"
+        with:
+            path: "package.json"
             prop_path: "version"
+
+      - name: Update Unity package.json Version
+        run: |
+          NEW_VERSION=${{ steps.root_version.outputs.prop }}
+          UNITY_PKG_PATH="Packages/${{env.packageName}}/package.json"
+          node -e "
+            const fs = require('fs');
+            const path = '${UNITY_PKG_PATH}';
+            const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+            pkg.version = '${NEW_VERSION}';
+            fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
+            console.log(\`Updated ${path} to version ${NEW_VERSION}\`);
+          "
+
+      - name: Commit Unity package.json
+        run: |
+          git add Packages/${{env.packageName}}/package.json
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update Unity package version to ${{ steps.root_version.outputs.prop }}"
+            git push
+          else
+            echo "No Unity package.json changes to commit."
+          fi
     
       - name: Set Environment Variables
         run: |
-          echo "zipFile=${{ env.packageName }}-${{ steps.version.outputs.prop }}".zip >> $GITHUB_ENV
-          echo "unityPackage=${{ env.packageName }}-${{ steps.version.outputs.prop }}.unitypackage" >> $GITHUB_ENV
+          echo "zipFile=${{ env.packageName }}-${{ steps.root_version.outputs.prop }}".zip >> $GITHUB_ENV
+          echo "unityPackage=${{ env.packageName }}-${{ steps.root_version.outputs.prop }}.unitypackage" >> $GITHUB_ENV
         
       - name: Create Zip
         uses: thedoctor0/zip-release@0.7.6
@@ -48,7 +106,9 @@ jobs:
       - name: Make Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.prop }}
+          draft: true
+          tag_name: ${{ steps.root_version.outputs.prop }}
+          generate_release_notes: true
           files: |
             ${{ env.zipFile }}
             ${{ env.unityPackage }}

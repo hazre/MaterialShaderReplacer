@@ -3,6 +3,8 @@
   "version": "1.1.0",
   "displayName": "Material Shader Replacer",
   "description": "A Unity Editor tool to mass replace material shaders.",
+  "url": "https://github.com/hazre/MaterialShaderReplacer",
+  "changelogUrl": "https://github.com/hazre/MaterialShaderReplacer/releases",
   "unity": "2022.3",
   "keywords": [
     "unity",
@@ -10,6 +12,7 @@
     "shaders",
     "materials"
   ],
+  "license": "MIT",
   "dependencies": {},
   "vpmDependencies": {
     "nadena.dev.ndmf": "^1.7.0"

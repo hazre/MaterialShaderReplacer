@@ -1,5 +1,5 @@
 ---
-"materialshaderreplacer-version-tracker": minor
+"materialshaderreplacer-changelog": minor
 ---
 
 **✨ Features & Enhancements**

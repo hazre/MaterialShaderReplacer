@@ -40,17 +40,8 @@ jobs:
       - name: Create Release PR or Version Files
         id: changesets
         run: pnpm changeset version
-
-      - name: Commit Changeset Files
-        run: |
-          git add .changeset/ package.json pnpm-lock.yaml CHANGELOG.md
-          # Check if there are changes to commit to avoid error
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: version packages"
-            git push
-          else
-            echo "No version changes to commit."
-          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get New Version from Root package.json
         id: root_version
@@ -60,28 +51,28 @@ jobs:
             prop_path: "version"
 
       - name: Update Unity package.json Version
-        run: |
-          NEW_VERSION=${{ steps.root_version.outputs.prop }}
-          UNITY_PKG_PATH="Packages/${{env.packageName}}/package.json"
-          node -e "
-            const fs = require('fs');
-            const path = '${UNITY_PKG_PATH}';
-            const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
-            pkg.version = '${NEW_VERSION}';
-            fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
-            console.log(\`Updated ${path} to version ${NEW_VERSION}\`);
-          "
+        env:
+          NEW_VERSION: ${{ steps.root_version.outputs.prop }}
+          UNITY_PKG_PATH: "Packages/${{env.packageName}}/package.json"
+        run: node scripts/update-unity-package-version.js
 
-      - name: Commit Unity package.json
+      - name: Commit Changeset Files
         run: |
-          git add Packages/${{env.packageName}}/package.json
+          git add .changeset/ package.json pnpm-lock.yaml CHANGELOG.md Packages/${{env.packageName}}/package.json
+          # Check if there are changes to commit to avoid error
           if ! git diff --staged --quiet; then
-            git commit -m "chore: update Unity package version to ${{ steps.root_version.outputs.prop }}"
+            git commit -m "chore: version packages"
             git push
           else
-            echo "No Unity package.json changes to commit."
+            echo "No version changes to commit."
           fi
-    
+
+      - name: Update Unity package.json changelogUrl
+        env:
+          NEW_VERSION: ${{ steps.root_version.outputs.prop }}
+          UNITY_PKG_PATH: "Packages/${{env.packageName}}/package.json"
+        run: node scripts/update-unity-package-changelog-url.js
+
       - name: Set Environment Variables
         run: |
           echo "zipFile=${{ env.packageName }}-${{ steps.root_version.outputs.prop }}".zip >> $GITHUB_ENV
@@ -101,14 +92,17 @@ jobs:
         with:
           package-path: ${{ env.unityPackage }}
           include-files: metaList
-        
+
+      - name: Extract Release Notes
+        id: release_notes
+        run: echo "body<<EOF" >> $GITHUB_OUTPUT && node scripts/extract-release-notes.js >> $GITHUB_OUTPUT && echo "EOF" >> $GITHUB_OUTPUT
         
       - name: Make Release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           tag_name: ${{ steps.root_version.outputs.prop }}
-          generate_release_notes: true
+          body: ${{ steps.release_notes.outputs.body }}
           files: |
             ${{ env.zipFile }}
             ${{ env.unityPackage }}

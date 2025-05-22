@@ -4,7 +4,7 @@
   "displayName": "Material Shader Replacer",
   "description": "A Unity Editor tool to mass replace material shaders.",
   "url": "https://github.com/hazre/MaterialShaderReplacer",
-  "changelogUrl": "https://github.com/hazre/MaterialShaderReplacer/releases",
+  "changelogUrl": "https://github.com/hazre/MaterialShaderReplacer/blob/main/CHANGELOG.md",
   "unity": "2022.3",
   "keywords": [
     "unity",

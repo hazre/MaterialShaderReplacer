@@ -1,7 +1,7 @@
 {
   "name": "materialshaderreplacer-changelog",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Used by Changesets to manage versioning and changelogs for the MaterialShaderReplacer Unity project.",
   "scripts": {
     "changeset": "changeset",

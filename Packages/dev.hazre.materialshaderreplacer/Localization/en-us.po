@@ -155,3 +155,27 @@ msgstr "Entire Project"
 
 msgid "MaterialShaderReplacer:Enum:ProcessingScope:GameObjectAndChildren"
 msgstr "GameObject And Children"
+
+msgid "MaterialShaderReplacer:Label:AdvancedOptions"
+msgstr "Advanced Options"
+
+msgid "MaterialShaderReplacer:Toggle:SourceAllMaterials"
+msgstr "Use All Materials as Source"
+
+msgid "MaterialShaderReplacer:Tooltip:SourceAllMaterials"
+msgstr "If checked, all materials in scope will be targeted for replacement, regardless of their current shader."
+
+msgid "MaterialShaderReplacer:Warning:SourceAllMaterials"
+msgstr "MAJOR WARNING: Selecting this option will attempt to change ALL materials within the chosen scope to the target shader. This is a destructive operation if used incorrectly. Ensure you have a full project backup before proceeding. Use with extreme caution!"
+
+msgid "MaterialShaderReplacer:Text:SourceEverything"
+msgstr "All Materials (as Source)"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryEverythingFormat"
+msgstr "Are you sure you want to change ALL materials to '{0}' within {1}?"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:WarningEverything"
+msgstr "CRITICAL WARNING: This will modify ALL materials in the specified scope. This operation can lead to unexpected results if materials are not compatible with the target shader. THIS ACTION CANNOT BE EASILY UNDONE FOR ALL CHANGES. Ensure you have a full project backup before proceeding. Are you absolutely sure?"
+
+msgid "MaterialShaderReplacer:Text:LogSourceEverything"
+msgstr "Everything (Any Shader)"

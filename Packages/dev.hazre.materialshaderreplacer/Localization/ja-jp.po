@@ -155,3 +155,27 @@ msgstr "プロジェクト全体"
 
 msgid "MaterialShaderReplacer:Enum:ProcessingScope:GameObjectAndChildren"
 msgstr "ゲームオブジェクトとその子"
+
+msgid "MaterialShaderReplacer:Label:AdvancedOptions"
+msgstr "詳細オプション"
+
+msgid "MaterialShaderReplacer:Toggle:SourceAllMaterials"
+msgstr "全ての素材をソースとして使用"
+
+msgid "MaterialShaderReplacer:Tooltip:SourceAllMaterials"
+msgstr "チェックすると、現在のシェーダーに関係なく、スコープ内のすべてのマテリアルが置換対象になります。"
+
+msgid "MaterialShaderReplacer:Warning:SourceAllMaterials"
+msgstr "重要警告：このオプションを選択すると、選択したスコープ内のすべてのマテリアルがターゲットシェーダーに変更されます。誤って使用すると破壊的な操作になります。続行する前に、完全なプロジェクトのバックアップがあることを確認してください。細心の注意を払って使用してください！"
+
+msgid "MaterialShaderReplacer:Text:SourceEverything"
+msgstr "全ての素材 (ソースとして)"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryEverythingFormat"
+msgstr "本当にすべてのマテリアルを「{0}」に{1}内で変更しますか？"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:WarningEverything"
+msgstr "致命的警告：これにより、指定されたスコープ内のすべてのマテリアルが変更されます。マテリアルがターゲットシェーダーと互換性がない場合、予期しない結果が生じる可能性があります。この操作はすべての変更に対して簡単に元に戻すことはできません。続行する前に、完全なプロジェクトのバックアップがあることを確認してください。本当に実行しますか？"
+
+msgid "MaterialShaderReplacer:Text:LogSourceEverything"
+msgstr "全て (任意のシェーダー)"

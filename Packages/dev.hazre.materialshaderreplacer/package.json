@@ -1,6 +1,6 @@
 {
   "name": "dev.hazre.materialshaderreplacer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "Material Shader Replacer",
   "description": "A Unity Editor tool to mass replace material shaders.",
   "url": "https://github.com/hazre/MaterialShaderReplacer",

@@ -1,0 +1,8 @@
+root = true
+
+[Packages/dev.hazre.materialshaderreplacer/**/**.cs]
+indent_style = tab
+indent_size = 2
+
+
+dotnet_diagnostic.CS8632.severity = none

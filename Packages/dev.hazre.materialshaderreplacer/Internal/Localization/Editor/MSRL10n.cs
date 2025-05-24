@@ -16,9 +16,9 @@ namespace dev.hazre.materialshaderreplacer
 	{
 		public static readonly IReadOnlyDictionary<SystemLanguage, string> SupportedLanguageMap = new Dictionary<SystemLanguage, string>
 		{
-				{ SystemLanguage.English, "en-us" },
-				{ SystemLanguage.Japanese, "ja-jp" },
-				{ SystemLanguage.German, "de-de" }
+				{ SystemLanguage.English, "en-us.po" },
+				{ SystemLanguage.Japanese, "ja-jp.po" },
+				{ SystemLanguage.German, "de-de.po" }
 		};
 
 		public static IEnumerable<string> SupportedLanguages => SupportedLanguageMap.Values;
@@ -36,14 +36,14 @@ namespace dev.hazre.materialshaderreplacer
 			var assets = new List<LocalizationAsset>();
 			foreach (var lang in SupportedLanguages)
 			{
-				var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(localizationFolder + lang + ".po");
+				var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(localizationFolder + lang);
 				if (asset != null)
 				{
 					assets.Add(asset);
 				}
 				else
 				{
-					Debug.LogWarning($"MSRL10N: Could not load localization asset for language '{lang}' at path '{localizationFolder + lang + ".po"}'");
+					Debug.LogWarning($"MSRL10N: Could not load localization asset for language '{lang}' at path '{localizationFolder + lang}'");
 				}
 			}
 			return assets;

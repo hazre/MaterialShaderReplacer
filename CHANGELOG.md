@@ -1,5 +1,11 @@
 # materialshaderreplacer-changelog
 
+## 1.2.2
+
+### Patch Changes
+
+- Fixed localization files not loading. ([`6fff238`](https://github.com/hazre/MaterialShaderReplacer/commit/6fff238cb9f73456a9166ea85275d98f8bc95cb6))
+
 ## 1.2.1
 
 ### Patch Changes

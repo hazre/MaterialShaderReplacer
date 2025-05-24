@@ -179,3 +179,6 @@ msgstr "KRITISCHE WARNUNG: Dies ändert ALLE Materialien im angegebenen Bereich.
 
 msgid "MaterialShaderReplacer:Text:LogSourceEverything"
 msgstr "Alles (Beliebiger Shader)"
+
+msgid "MSRLanguageSwitcher:EditorLanguageLabel"
+msgstr "Sprache"

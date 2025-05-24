@@ -179,3 +179,6 @@ msgstr "致命的警告：これにより、指定されたスコープ内のす
 
 msgid "MaterialShaderReplacer:Text:LogSourceEverything"
 msgstr "全て (任意のシェーダー)"
+
+msgid "MSRLanguageSwitcher:EditorLanguageLabel"
+msgstr "言語"

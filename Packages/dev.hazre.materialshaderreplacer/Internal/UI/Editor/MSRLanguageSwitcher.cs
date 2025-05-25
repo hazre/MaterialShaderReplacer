@@ -28,7 +28,9 @@ namespace dev.hazre.materialshaderreplacer
 
 		public static void DrawImmediate()
 		{
-			var supportedLanguagesArray = MSRL10N.SupportedLanguages.ToArray();
+			var supportedLanguagesArray = MSRL10N.SupportedLanguages
+				.Select(lang => lang.Replace(".po", ""))
+				.ToArray();
 			var packageDefaultLang = MSRL10N.Localizer.DefaultLanguage;
 
 			string languageToDisplayAsSelected;
@@ -73,7 +75,7 @@ namespace dev.hazre.materialshaderreplacer
 
 			var displayNames = supportedLanguagesArray.Select(lang =>
 			{
-				var nativeName = CultureInfo.GetCultureInfo(lang).NativeName;
+				var nativeName = CultureInfo.CreateSpecificCulture(lang).NativeName;
 				return string.IsNullOrEmpty(nativeName) ? lang : nativeName;
 			}).ToArray();
 

@@ -1,5 +1,11 @@
 # materialshaderreplacer-changelog
 
+## 1.2.3
+
+### Patch Changes
+
+- Fixed setting invalid language id to NDMF's language preferences. ([`d800719`](https://github.com/hazre/MaterialShaderReplacer/commit/d800719b550ea9e8f621977f48bd6e21c502db03))
+
 ## 1.2.2
 
 ### Patch Changes

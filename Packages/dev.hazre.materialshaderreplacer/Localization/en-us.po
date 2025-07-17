@@ -182,3 +182,25 @@ msgstr "Everything (Any Shader)"
 
 msgid "MSRLanguageSwitcher:EditorLanguageLabel"
 msgstr "Language"
+
+# New strings for invalid materials functionality
+msgid "MaterialShaderReplacer:Toggle:SourceInvalidMaterials"
+msgstr "Use Invalid Materials as Source"
+
+msgid "MaterialShaderReplacer:Tooltip:SourceInvalidMaterials"
+msgstr "If checked, materials with invalid/missing shaders will be targeted for replacement."
+
+msgid "MaterialShaderReplacer:HelpBox:SourceInvalidMaterials"
+msgstr "This will target materials with invalid, missing, or error shaders for replacement."
+
+msgid "MaterialShaderReplacer:Text:SourceInvalidMaterials"
+msgstr "Invalid Materials (as Source)"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryInvalidFormat"
+msgstr "Are you sure you want to replace all materials with invalid/missing shaders to '{0}' within {1}?"
+
+msgid "MaterialShaderReplacer:Dialog:ConfirmReplacement:WarningInvalid"
+msgstr "This will modify all materials with invalid, missing, or error shaders in the specified scope. This should be safe as it targets problematic materials, but ensure you have a backup."
+
+msgid "MaterialShaderReplacer:Text:LogSourceInvalidFormat"
+msgstr "Invalid ({0})"

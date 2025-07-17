@@ -32,6 +32,7 @@ namespace dev.hazre.materialshaderreplacer
 		private Shader sourceShader;
 		private Shader targetShader;
 		private bool sourceShaderIsEverything = false;
+		private bool sourceShaderIsInvalid = false;
 		private Vector2 logScrollPosition;
 		private List<string> changedMaterialsLog = new List<string>();
 
@@ -126,6 +127,19 @@ namespace dev.hazre.materialshaderreplacer
 			return EditorGUILayout.ObjectField(label, currentShader, typeof(Shader), false) as Shader;
 		}
 
+		private bool IsShaderInvalid(Shader shader)
+		{
+			if (shader == null) return true;
+
+			string shaderName = shader.name;
+			return shaderName == "Hidden/InternalErrorShader" ||
+					 shaderName == "No shader selected" ||
+					 shaderName == "Hidden/InternalErrorShader" ||
+					 shaderName.Contains("Missing") ||
+					 shaderName.Contains("Error") ||
+					 !shader.isSupported;
+		}
+
 		void OnGUI()
 		{
 			if (serializedObjectInstance == null)
@@ -170,7 +184,7 @@ namespace dev.hazre.materialshaderreplacer
 			if (reflectionFailed)
 			{
 				EditorGUILayout.HelpBox(MSRL10N.Tr("MaterialShaderReplacer:HelpBox:AdvancedDropdownFailed"), MessageType.Warning);
-				using (new EditorGUI.DisabledScope(sourceShaderIsEverything))
+				using (new EditorGUI.DisabledScope(sourceShaderIsEverything || sourceShaderIsInvalid))
 				{
 					sourceShader = FallbackShaderField(MSRL10N.Tr("MaterialShaderReplacer:Label:SourceShader"), sourceShader);
 				}
@@ -186,6 +200,7 @@ namespace dev.hazre.materialshaderreplacer
 			if (showAdvancedOptions)
 			{
 				EditorGUI.indentLevel++;
+
 				EditorGUI.BeginChangeCheck();
 				sourceShaderIsEverything = EditorGUILayout.ToggleLeft(
 						new GUIContent(MSRL10N.Tr("MaterialShaderReplacer:Toggle:SourceAllMaterials"), MSRL10N.Tr("MaterialShaderReplacer:Tooltip:SourceAllMaterials")),
@@ -196,6 +211,22 @@ namespace dev.hazre.materialshaderreplacer
 					if (sourceShaderIsEverything)
 					{
 						sourceShader = null;
+						sourceShaderIsInvalid = false;
+					}
+					Repaint();
+				}
+
+				EditorGUI.BeginChangeCheck();
+				sourceShaderIsInvalid = EditorGUILayout.ToggleLeft(
+						new GUIContent(MSRL10N.Tr("MaterialShaderReplacer:Toggle:SourceInvalidMaterials"), MSRL10N.Tr("MaterialShaderReplacer:Tooltip:SourceInvalidMaterials")),
+						sourceShaderIsInvalid
+				);
+				if (EditorGUI.EndChangeCheck())
+				{
+					if (sourceShaderIsInvalid)
+					{
+						sourceShader = null;
+						sourceShaderIsEverything = false;
 					}
 					Repaint();
 				}
@@ -204,6 +235,11 @@ namespace dev.hazre.materialshaderreplacer
 				{
 					EditorGUILayout.HelpBox(MSRL10N.Tr("MaterialShaderReplacer:Warning:SourceAllMaterials"), MessageType.Warning);
 				}
+				else if (sourceShaderIsInvalid)
+				{
+					EditorGUILayout.HelpBox(MSRL10N.Tr("MaterialShaderReplacer:HelpBox:SourceInvalidMaterials"), MessageType.Info);
+				}
+
 				EditorGUI.indentLevel--;
 			}
 			EditorGUILayout.Space();
@@ -241,6 +277,12 @@ namespace dev.hazre.materialshaderreplacer
 						query = string.Format(MSRL10N.Tr("MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryEverythingFormat"), targetShaderName, scopeDescription);
 						warning = MSRL10N.Tr("MaterialShaderReplacer:Dialog:ConfirmReplacement:WarningEverything");
 					}
+					else if (sourceShaderIsInvalid)
+					{
+						string targetShaderName = targetShader != null ? targetShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None");
+						query = string.Format(MSRL10N.Tr("MaterialShaderReplacer:Dialog:ConfirmReplacement:QueryInvalidFormat"), targetShaderName, scopeDescription);
+						warning = MSRL10N.Tr("MaterialShaderReplacer:Dialog:ConfirmReplacement:WarningInvalid");
+					}
 					else
 					{
 						string sourceShaderName = sourceShader != null ? sourceShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None");
@@ -273,10 +315,15 @@ namespace dev.hazre.materialshaderreplacer
 		{
 			GUIContent buttonContent;
 			bool isEverythingSourceMode = isSource && sourceShaderIsEverything;
+			bool isInvalidSourceMode = isSource && sourceShaderIsInvalid;
 
 			if (isEverythingSourceMode)
 			{
 				buttonContent = new GUIContent(MSRL10N.Tr("MaterialShaderReplacer:Text:SourceEverything"));
+			}
+			else if (isInvalidSourceMode)
+			{
+				buttonContent = new GUIContent(MSRL10N.Tr("MaterialShaderReplacer:Text:SourceInvalidMaterials"));
 			}
 			else
 			{
@@ -286,11 +333,11 @@ namespace dev.hazre.materialshaderreplacer
 			Rect rect = EditorGUILayout.GetControlRect();
 			rect = EditorGUI.PrefixLabel(rect, EditorGUIUtility.TrTempContent(label));
 
-			using (new EditorGUI.DisabledScope(isEverythingSourceMode))
+			using (new EditorGUI.DisabledScope(isEverythingSourceMode || isInvalidSourceMode))
 			{
 				if (EditorGUI.DropdownButton(rect, buttonContent, FocusType.Keyboard))
 				{
-					if (!isEverythingSourceMode)
+					if (!isEverythingSourceMode && !isInvalidSourceMode)
 					{
 						isSelectingSourceShader = isSource;
 						ShowReflectedShaderDropdown(rect, shader);
@@ -304,7 +351,7 @@ namespace dev.hazre.materialshaderreplacer
 			string errorTitle = MSRL10N.Tr("MaterialShaderReplacer:Dialog:Error:Title");
 			string okButton = MSRL10N.Tr("MaterialShaderReplacer:Button:OK");
 
-			if (!sourceShaderIsEverything && sourceShader == null)
+			if (!sourceShaderIsEverything && !sourceShaderIsInvalid && sourceShader == null)
 			{
 				EditorUtility.DisplayDialog(errorTitle, MSRL10N.Tr("MaterialShaderReplacer:Dialog:Error:SourceShaderMissing"), okButton); return false;
 			}
@@ -312,7 +359,7 @@ namespace dev.hazre.materialshaderreplacer
 			{
 				EditorUtility.DisplayDialog(errorTitle, MSRL10N.Tr("MaterialShaderReplacer:Dialog:Error:TargetShaderMissing"), okButton); return false;
 			}
-			if (!sourceShaderIsEverything && sourceShader == targetShader)
+			if (!sourceShaderIsEverything && !sourceShaderIsInvalid && sourceShader == targetShader)
 			{
 				EditorUtility.DisplayDialog(errorTitle, MSRL10N.Tr("MaterialShaderReplacer:Dialog:Error:ShadersSame"), okButton); return false;
 			}
@@ -388,12 +435,15 @@ namespace dev.hazre.materialshaderreplacer
 				bool cancelled = EditorUtility.DisplayCancelableProgressBar(progressBarTitle, progressBarInfo, (float)i / guids.Length);
 				if (cancelled) { changedMaterialsLog.Add(operationCancelledMsg); break; }
 
-				if (material != null && (sourceShaderIsEverything || material.shader == sourceShader))
+				if (material != null && ShouldReplaceMaterial(material))
 				{
+					string originalShaderName = material.shader != null ? material.shader.name : "null";
+
 					Undo.RecordObject(material, MSRL10N.Tr("MaterialShaderReplacer:Undo:ChangeShaderAsset"));
 					material.shader = targetShader;
 					EditorUtility.SetDirty(material);
-					string sourceShaderNameForLog = sourceShaderIsEverything ? MSRL10N.Tr("MaterialShaderReplacer:Text:LogSourceEverything") : (sourceShader != null ? sourceShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None"));
+
+					string sourceShaderNameForLog = GetSourceShaderNameForLog(originalShaderName);
 					string targetShaderNameForLog = targetShader != null ? targetShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None");
 					changedMaterialsLog.Add(string.Format(MSRL10N.Tr("MaterialShaderReplacer:Log:ChangedAsset:Format"), assetPath, sourceShaderNameForLog, targetShaderNameForLog));
 					count++;
@@ -428,8 +478,10 @@ namespace dev.hazre.materialshaderreplacer
 				for (int j = 0; j < sharedMaterials.Length; j++)
 				{
 					Material mat = sharedMaterials[j];
-					if (mat != null && (sourceShaderIsEverything || mat.shader == sourceShader))
+					if (mat != null && ShouldReplaceMaterial(mat))
 					{
+						string originalShaderName = mat.shader != null ? mat.shader.name : "null";
+
 						Undo.RecordObject(mat, MSRL10N.Tr("MaterialShaderReplacer:Undo:ChangeShaderInstanceOrAsset"));
 						mat.shader = targetShader;
 						EditorUtility.SetDirty(mat);
@@ -440,7 +492,7 @@ namespace dev.hazre.materialshaderreplacer
 							modifiedScenes.Add(renderer.gameObject.scene);
 						}
 
-						string sourceShaderNameForLog = sourceShaderIsEverything ? MSRL10N.Tr("MaterialShaderReplacer:Text:LogSourceEverything") : (sourceShader != null ? sourceShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None"));
+						string sourceShaderNameForLog = GetSourceShaderNameForLog(originalShaderName);
 						string targetShaderNameForLog = targetShader != null ? targetShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None");
 						changedMaterialsLog.Add(string.Format(MSRL10N.Tr("MaterialShaderReplacer:Log:ChangedOnGameObject:Format"), GetGameObjectPath(renderer.gameObject), mat.name, j, sourceShaderNameForLog, targetShaderNameForLog));
 						count++;
@@ -448,6 +500,38 @@ namespace dev.hazre.materialshaderreplacer
 				}
 			}
 			return count;
+		}
+
+		private bool ShouldReplaceMaterial(Material material)
+		{
+			if (sourceShaderIsEverything)
+			{
+				return true;
+			}
+			else if (sourceShaderIsInvalid)
+			{
+				return IsShaderInvalid(material.shader);
+			}
+			else
+			{
+				return material.shader == sourceShader;
+			}
+		}
+
+		private string GetSourceShaderNameForLog(string originalShaderName)
+		{
+			if (sourceShaderIsEverything)
+			{
+				return MSRL10N.Tr("MaterialShaderReplacer:Text:LogSourceEverything");
+			}
+			else if (sourceShaderIsInvalid)
+			{
+				return string.Format(MSRL10N.Tr("MaterialShaderReplacer:Text:LogSourceInvalidFormat"), originalShaderName);
+			}
+			else
+			{
+				return sourceShader != null ? sourceShader.name : MSRL10N.Tr("MaterialShaderReplacer:Text:None");
+			}
 		}
 
 		private bool IsGameObjectExcluded(GameObject go)

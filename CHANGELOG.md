@@ -1,5 +1,11 @@
 # materialshaderreplacer-changelog
 
+## 1.3.0-next.0
+
+### Minor Changes
+
+- Added "Use Invalid Materials as Source" option to automatically target and replace materials with invalid/missing shaders. ([`ec9fd6c`](https://github.com/hazre/MaterialShaderReplacer/commit/ec9fd6cbe69c94470ce0074b9c52d7c94d9b57a7))
+
 ## 1.2.3
 
 ### Patch Changes

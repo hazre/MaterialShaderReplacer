@@ -4,5 +4,7 @@
   "initialVersions": {
     "materialshaderreplacer-changelog": "1.2.3"
   },
-  "changesets": []
+  "changesets": [
+    "four-readers-work"
+  ]
 }

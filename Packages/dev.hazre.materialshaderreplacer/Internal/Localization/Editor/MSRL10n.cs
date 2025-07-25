@@ -2,7 +2,7 @@
 // https://github.com/anatawa12/AvatarOptimizer/blob/master/Internal/Localization/Editor/AAOL10N.cs
 
 using System.Collections.Generic;
-using System; // For Action
+using System;
 using nadena.dev.ndmf.localization;
 using UnityEditor;
 using UnityEngine;
@@ -23,7 +23,38 @@ namespace dev.hazre.materialshaderreplacer
 
 		public static IEnumerable<string> SupportedLanguages => SupportedLanguageMap.Values;
 
-		public static readonly Localizer Localizer = new Localizer("en-us", () =>
+		private static Localizer _localizer;
+		private static bool _initializationAttempted = false;
+
+		public static Localizer Localizer
+		{
+			get
+			{
+				if (_localizer == null && !_initializationAttempted)
+				{
+					InitializeLocalizer();
+				}
+				return _localizer;
+			}
+		}
+
+		private static void InitializeLocalizer()
+		{
+			_initializationAttempted = true;
+
+			try
+			{
+				_localizer = new Localizer("en-us", LoadLocalizationAssets);
+			}
+			catch (Exception e)
+			{
+				Debug.LogError($"MSRL10N: Failed to initialize localizer: {e.Message}");
+				// Create a fallback localizer that just returns the keys
+				_localizer = new Localizer("en-us", () => new List<LocalizationAsset>());
+			}
+		}
+
+		private static List<LocalizationAsset> LoadLocalizationAssets()
 		{
 			var localizationFolder = AssetDatabase.GUIDToAssetPath("40f966fef79afb84485c651998c79e08");
 			if (string.IsNullOrEmpty(localizationFolder))
@@ -36,26 +67,61 @@ namespace dev.hazre.materialshaderreplacer
 			var assets = new List<LocalizationAsset>();
 			foreach (var lang in SupportedLanguages)
 			{
-				var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(localizationFolder + lang);
+				var assetPath = localizationFolder + lang;
+				var asset = AssetDatabase.LoadAssetAtPath<LocalizationAsset>(assetPath);
 				if (asset != null)
 				{
 					assets.Add(asset);
 				}
 				else
 				{
-					Debug.LogWarning($"MSRL10N: Could not load localization asset for language '{lang}' at path '{localizationFolder + lang}'");
+					Debug.LogWarning($"MSRL10N: Could not load localization asset for language '{lang}' at path '{assetPath}'");
 				}
 			}
-			return assets;
-		});
 
-		public static string Tr(string key) => Localizer.GetLocalizedString(key);
+			if (assets.Count == 0)
+			{
+				Debug.LogWarning("MSRL10N: No localization assets were loaded. Localization will fallback to keys.");
+			}
+
+			return assets;
+		}
+
+		public static string Tr(string key)
+		{
+			if (Localizer == null)
+			{
+				Debug.LogWarning($"MSRL10N: Localizer not initialized, returning key: {key}");
+				return key;
+			}
+
+			var result = Localizer.GetLocalizedString(key);
+
+			// If we get back the key unchanged, it likely means localization failed
+			if (result == key && !_initializationAttempted)
+			{
+				RefreshLocalizer();
+				return Tr(key);
+			}
+
+			return result;
+		}
 
 		public static string? TryTr(string key)
 		{
-			if (Localizer.TryGetLocalizedString(key, out var result))
+			if (Localizer?.TryGetLocalizedString(key, out var result) == true)
 				return result;
 			return null;
+		}
+
+		/// <summary>
+		/// Forces reinitialization of the localizer. Call this if localization isn't working.
+		/// </summary>
+		public static void RefreshLocalizer()
+		{
+			_localizer = null;
+			_initializationAttempted = false;
+			Debug.Log("MSRL10N: Localizer refreshed. Next localization call will reinitialize.");
 		}
 
 		public static Action DrawCustomLanguagePicker { get; set; }

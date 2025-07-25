@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {},
   "vpmDependencies": {
-    "nadena.dev.ndmf": "^1.7.0"
+    "nadena.dev.ndmf": "^1.8.0"
   },
   "author": {
     "name": "hazre"

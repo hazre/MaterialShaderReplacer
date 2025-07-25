@@ -1,5 +1,13 @@
 # materialshaderreplacer-changelog
 
+## 1.3.0-next.1
+
+### Patch Changes
+
+- Improved how localization is initialized in the Unity Editor to ensure translations are loaded correctly when the editor starts. ([`f6b2731`](https://github.com/hazre/MaterialShaderReplacer/commit/f6b273196212d956b1e4b052d035aeeb740a6138))
+
+- Updated Non-Destructive Modular Framework to version ^1.8.0 to ensure compatibility with the latest features and improvements. ([`4b7e06c`](https://github.com/hazre/MaterialShaderReplacer/commit/4b7e06c23ad62191c65f16b12234d44b3c232e0b))
+
 ## 1.3.0-next.0
 
 ### Minor Changes
